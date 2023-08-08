@@ -35,7 +35,8 @@ THEN I am prompted to select an employee to update and their new role and this i
 * Dependency packages: https://www.npmjs.com 
 * MySQL default port: https://kinsta.com/knowledgebase/mysql-port/
 * Switch statement: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/switch
-*
+* Department names - https://simplicable.com/en/company-departments
+* Employee names - https://ethanwiner.com/funnames.html 
 * RICE UNIVERSITY Boot Camp Activities for MySQL.
 * Special thanks to my tutor Ben.
 

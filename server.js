@@ -23,18 +23,18 @@ connection.connect(err => {
 // This function prompts for the first question
 const startMenu = () => {
     inquirer.prompt({
-        message: '',
+        message: 'What would you like to do?',
         name: 'menu',
         type: 'list',
         choices: [
             'View all departments',
-            'View all roles',
-            'View all employees',
             'Add a department',
-            'Add a role',
+            'View all employees',
             'Add an employee',
             'Update an employee role',
-            'Exit',
+            'View all roles',
+            'Add a role',
+            'Quit',
         ],
     })
 // The switch statement evaluates an expression, matching the expression's value 
@@ -44,8 +44,8 @@ const startMenu = () => {
     .then(response => {
         switch (response.menu) {
             case 'View all departments':
-                viewDepartment();
-                break;
+                viewDepartment(); // Variable has been created to use below for making additional question
+                break;            // Each case will make a variable for an additional question
             case 'View all roles':
                 viewRoles();
                 break;
@@ -64,12 +64,39 @@ const startMenu = () => {
             case 'Update an employee role':
                 updateEmployeeRole();
                 break;
-            case 'Exit':
+            case 'Quit':
                 connection.end();
                 break;
                 default:
                     connection.end();                     
         }
+    });
+};
+
+// This function creates a table - choose to view all departments
+const viewDepartment = () => {
+    connection.query('Select * FROM departments', function (err, res) {
+        if (err) throw err;
+        console.table(res);
+        startMenu();
+    });
+};
+
+// This function creates a table - choose to view all roles
+const viewRoles = () => {
+    connection.query('Select * FROM roles', function (err, res) {
+        if (err) throw err;
+        console.table(res);
+        startMenu();
+    });
+};
+
+// This function creates a table - choose to view all employees
+const viewEmployees = () => {
+    connection.query('Select * FROM employees', function (err, res) {
+        if (err) throw err;
+        console.table(res);
+        startMenu();
     });
 };
 
