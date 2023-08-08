@@ -1,24 +1,9 @@
 // Dependencies
 const inquirer = require('inquirer');
 const mysql = require('mysql2');
+const db = require('./db/connection');
 // Do I need additional function and requirements !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-// This function came from npm site: https://www.npmjs.com/package/mysql2 
-const connection = mysql.createConnection({
-    host: 'localhost',
-    port: 3306, // Port 3306 is the default port for mysql
-    user: 'root',
-    password: '', // Need to add password here !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    database: 'company_db', 
-});
-
-// This function will throw error if not connected OR let user know he/she is 
-// connected, then move onto the questions in startMenu 
-connection.connect(err => {
-    if (err) throw err;
-    console.log('You are connected to the EMPLOYEE TRACKER database!');
-    startMenu();
-});
 
 // This function prompts for the first question
 const startMenu = () => {
