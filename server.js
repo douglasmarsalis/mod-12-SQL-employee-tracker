@@ -1,7 +1,8 @@
 // Dependencies
 const inquirer = require('inquirer');
 const mysql = require('mysql2');
-const db = require('./db/connections');
+const connection = require('./db/connections');
+ 
 
 // This function prompts for the first question with a choice menu
 const startMenu = () => {
@@ -76,7 +77,7 @@ const viewRoles = () => {
 
 // This function creates a table - choose to view all employees
 const viewEmployees = () => {
-    connection.query('employees.id, first_name, last_name, title, department_name, salary, manager_id FROM ((departments JOIN job ON departments.id = roles.departments_id) JOIN employees ON roles.id = employees.roles_id);',
+    connection.query('SELECT employees.id, employees.first_name, employees.last_name, roles.title, departments.department_name, roles.salary, employees.manager_id FROM ((departments JOIN roles ON departments.id = roles.department_id) JOIN employees ON roles.id = employees.role_id);',
         function (err, res) {
             if (err) throw err;
             console.table(res);
@@ -88,7 +89,7 @@ const viewEmployees = () => {
 const addDepartment = () => {
     inquirer.prompt([
         {
-            name: 'department',
+            name: 'department_name',
             type: 'input',
             message: 'What is the name of the departrment?',
         },
@@ -96,7 +97,7 @@ const addDepartment = () => {
         .then(answer => {
             connection.query(
                 'INSERT INTO departments (department_name) VALUES (?)',
-                [answer.departments],
+                [answer.department_name],
                 function (err, res) {
                     if (err) throw err;
                     console.log('Department was successfully added!');
@@ -201,3 +202,5 @@ const updateEmployeeRole = () => {
             );
         });
 };
+
+startMenu();

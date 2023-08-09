@@ -15,12 +15,12 @@ INSERT INTO roles (title, salary, department_id)
 VALUES
 ('CEO (El Hefe)', 100000, 1),
 ('VP (Little Hefe)', 80000, 1),
-('Manager', 60000, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10),
+('Manager', 60000, 10),
 ('Web Dev Front End', 40000, 4),
 ('Web Dev Back End', 50000, 4),
 ('Web Dev Full Stack', 70000, 4),
-('Office Worker', 35000, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10),
-('Secretary', 20000, 7)
+('Office Worker', 35000, 10),
+('Secretary', 20000, 7),
 ('Janitor', 24000, 7),
 ('Tea Lady', 15000, 7);
 
