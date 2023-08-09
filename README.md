@@ -50,6 +50,8 @@ https://github.com/douglasmarsalis/mod-12-SQL-employee-tracker
 
 ## Demonstration Video
 
+[employee_tracker.webm](https://github.com/douglasmarsalis/mod-12-SQL-employee-tracker/assets/112460009/cbb5aaf0-4893-4827-95b2-15754c564c3d)
+
 
 ## License
 MIT License
