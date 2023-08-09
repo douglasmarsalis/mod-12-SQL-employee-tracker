@@ -1,11 +1,9 @@
 // Dependencies
 const inquirer = require('inquirer');
 const mysql = require('mysql2');
-const db = require('./db/connection');
-// Do I need additional function and requirements !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+const db = require('./db/connections');
 
-
-// This function prompts for the first question
+// This function prompts for the first question with a choice menu
 const startMenu = () => {
     inquirer.prompt({
         message: 'What would you like to do?',
@@ -29,7 +27,7 @@ const startMenu = () => {
     .then(response => {
         switch (response.menu) {
             case 'View all departments':
-                viewDepartment(); // Variable has been created to use below for making additional question
+                viewDepartment(); // Variables have been created to use below for making additional questions
                 break;            // Each case will make a variable for an additional question
             case 'View all roles':
                 viewRoles();
@@ -78,10 +76,128 @@ const viewRoles = () => {
 
 // This function creates a table - choose to view all employees
 const viewEmployees = () => {
-    connection.query('Select * FROM employees', function (err, res) {
-        if (err) throw err;
-        console.table(res);
-        startMenu();
-    });
+    connection.query('employees.id, first_name, last_name, title, department_name, salary, manager_id FROM ((departments JOIN job ON departments.id = roles.departments_id) JOIN employees ON roles.id = employees.roles_id);',
+        function (err, res) {
+            if (err) throw err;
+            console.table(res);
+            startMenu();
+        });
 };
 
+// Choose to add department
+const addDepartment = () => {
+    inquirer.prompt([
+        {
+            name: 'department',
+            type: 'input',
+            message: 'What is the name of the departrment?',
+        },
+    ])
+        .then(answer => {
+            connection.query(
+                'INSERT INTO departments (department_name) VALUES (?)',
+                [answer.departments],
+                function (err, res) {
+                    if (err) throw err;
+                    console.log('Department was successfully added!');
+                    startMenu();
+                }
+            );
+        });
+};
+
+// Choose to add role
+const addRole = () => {
+    inquirer.prompt([
+        {
+            name: 'title',
+            type: 'input',
+            message: 'What is the name of the role?',
+        },
+        {
+            name: 'salary',
+            type: 'input',
+            message: 'What is the salary of the role?',
+        },
+        {
+            name: 'departmentId',
+            type: 'input',
+            message: 'Which department (by ID) does the role belong to?',
+        },
+    ])
+        .then(answer => {
+            connection.query(
+                'INSERT INTO roles (title, salary, department_id) VALUES (?, ?, ?)',
+                [answer.title, answer.salary, answer.department_id],
+                function (err, res) {
+                    if (err) throw err;
+                    console.log('Role was successfully added!');
+                    startMenu();
+                }
+            );
+        });
+};
+
+// Choose to add employee
+const addEmployee = () => {
+    inquirer.prompt([
+        {
+            name: 'firstName',
+            type: 'input',
+            message: "What is the employee's first name?",
+        },
+        {
+            name: 'lastName',
+            type: 'input',
+            message: "What is the employee's last name?",
+        },
+        {
+            name: 'roleId',
+            type: 'input',
+            message: "What is the employee's role (by ID)?",
+        },
+        {
+            name: 'managerId',
+            type: 'input',
+            message: "Who is the employee's manager (by ID)",
+        },
+    ])
+        .then(answer => {
+            connection.query(
+                'INSERT INTO employees (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)',
+                [answer.firstName, answer.lastName, answer.roleId, answer.managerId],
+                function (err, res) {
+                    if (err) throw err;
+                    console.log('Employee was successfully added!');
+                    startMenu();
+                }
+            );
+        });
+};
+
+// Choose to update employee role
+const updateEmployeeRole = () => {
+    inquirer.prompt([
+        {
+            name: 'id',
+            type: 'input',
+            message: "Which employee's role (by ID) do you want to update?",
+        },
+        {
+            name: 'roleId',
+            type: 'input',
+            message: "Which role (by ID) do you want to assign to the selected employee?",
+        },
+    ])
+        .then(answer => {
+            connection.query(
+                'UPDATE employees SET role_id=? WHERE id=?',
+                [answer.roleId, answer.id],
+                function (err, res) {
+                    if (err) throw err;
+                    console.log('Employee was successfully updated!');
+                    startMenu();
+                }
+            );
+        });
+};
